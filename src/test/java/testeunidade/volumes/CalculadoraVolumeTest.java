@@ -1,13 +1,13 @@
 package testeunidade.volumes;
 
+import java.io.FileReader;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 import com.opencsv.CSVReader;
 import com.testeunidade.volumes.CalculadoraVolume;
-
-import java.io.FileReader;
-import java.util.List;
 
 public class CalculadoraVolumeTest {
     @Test
@@ -38,21 +38,20 @@ public class CalculadoraVolumeTest {
 
     }
 
-    // Teste usando um arquivo CSV como massa de teste para a esfera
-    @Test
+       @Test
     public void testVolumeEsferaComCSV() throws Exception {
         // Abre o arquivo CSV
-        CSVReader reader = new CSVReader(new FileReader("massa_esfera.csv"));
+        try (CSVReader reader = new CSVReader(new FileReader("src/test/resources/massa_esfera.csv"))) {
 
-        List<String[]> linhas = reader.readAll();
-        linhas.remove(0);
+            List<String[]> linhas = reader.readAll();
+            linhas.remove(0);
 
-        for (String[] linha : linhas) {
-            double raio = Double.parseDouble(linha[0]);
-            double esperado = Double.parseDouble(linha[1]);
-            assertEquals(esperado, CalculadoraVolume.volumeEsfera(raio), 0.0001);
+            for (String[] linha : linhas) {
+                double raio = Double.parseDouble(linha[0]);
+                double esperado = Double.parseDouble(linha[1]);
+                assertEquals(esperado, CalculadoraVolume.volumeEsfera(raio), 0.0001);
+            }
+
         }
-
-        reader.close();
     }
 }
